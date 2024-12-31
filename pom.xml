@@ -20,6 +20,7 @@
         <!-- Add more services here -->
         <module>Eureka-server</module>
         <module>UserService</module>
+        <module>AuthService</module>
 
     </modules>
         <dependencies>

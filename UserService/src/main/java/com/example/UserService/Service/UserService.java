@@ -26,17 +26,37 @@ public class UserService {
         }
         return usersInfos;
     }
-    public User addNewUser(User user){
+
+    public User creatUser(User user){
         return userRepository.save(user);
     }
+
+    public User updateUser(Long id, User userDetails) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found with id " + id));
+        user.setUsername(userDetails.getUsername());
+        user.setEmail(userDetails.getEmail());
+        user.setPassword(userDetails.getPassword());
+        user.setRoles(userDetails.getRoles());
+        return userRepository.save(user);
+    }
+
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
+    }
+
     public Optional<User> getUserDetailForAuth(Long id){
+
         return userRepository.findById(id);
     }
 
     public Optional<User> getUserByUsername(String username){
+
         return userRepository.findByUsername(username);
     }
+
     public User findByEmail(String email){
         return userRepository.findByEmail(email);
     }
+
 }

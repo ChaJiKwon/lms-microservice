@@ -42,8 +42,6 @@ public class AuthService  {
             UsernamePasswordAuthenticationToken upat=  new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword());
             System.out.println("Token: " + upat);
             Authentication auth = authenticationManager.authenticate(upat);
-            System.out.println("Token2: " );
-            System.out.println("Auth 1 : ");
             SecurityContextHolder.getContext().setAuthentication(auth);
             return new ResponseEntity<>("Login success", HttpStatus.OK);
         }

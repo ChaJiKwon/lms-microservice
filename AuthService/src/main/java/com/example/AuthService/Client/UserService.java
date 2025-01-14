@@ -8,14 +8,11 @@ import org.springframework.web.client.RestTemplate;
 
 @Component
 public class UserService  {
-    private  RestTemplate restTemplate;
-
-    private PasswordEncoder encoder;
     @Autowired
-    public UserService(RestTemplate restTemplate, PasswordEncoder encoder) {
-        this.restTemplate = restTemplate;
-        this.encoder = encoder;
-    }
+    private  RestTemplate restTemplate;
+    @Autowired
+    private PasswordEncoder encoder;
+
     public UserDto getUserByUsername(String username) {
         String userServiceUrl = "http://localhost:8080/users/" + username; // URL của UserService
         return restTemplate.getForObject(userServiceUrl, UserDto.class);

@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.example</groupId>
-    <artifactId>Microservice_test</artifactId>
+    <artifactId>lms</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
@@ -18,9 +18,11 @@
     <modules>
 
         <!-- Add more services here -->
-        <module>Eureka-server</module>
-        <module>UserService</module>
-        <module>AuthService</module>
+        <module>user-service</module>
+        <module>auth-service</module>
+        <module>api-gateway</module>
+        <module>course-service</module>
+        <module>service-registry</module>
 
     </modules>
         <dependencies>
@@ -30,6 +32,22 @@
                 <version>2.4.12</version>
                 <scope>import</scope>
                 <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot</artifactId>
+                <version>3.4.1</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-autoconfigure</artifactId>
+                <version>3.4.1</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-netflix-eureka-server</artifactId>
             </dependency>
         </dependencies>
     <dependencyManagement>

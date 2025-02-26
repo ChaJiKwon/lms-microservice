@@ -1,0 +1,33 @@
+server:
+  port: 8082
+
+spring:
+
+#  main:
+#    web-application-type: reactive
+#    allow-bean-definition-overriding: true
+  application:
+    name: auth-service
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/users_service
+    username: postgres
+    password: khoaidaica123
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+logging:
+  level:
+    com:
+      example:
+        AuthService: TRACE
+eureka:
+  instance:
+    client:
+      serverUrl:
+        defaultZone: http://localhost:8761/eureka/

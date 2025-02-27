@@ -1,8 +1,7 @@
-package com.example.authservice.abcxyz.main;
+package com.example.authservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
 
 @ComponentScan("com.example.authservice")

@@ -23,6 +23,7 @@
         <module>api-gateway</module>
         <module>course-service</module>
         <module>service-registry</module>
+        <module>enrollment-service</module>
 
     </modules>
         <dependencies>

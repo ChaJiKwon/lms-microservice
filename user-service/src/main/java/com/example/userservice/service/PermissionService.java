@@ -16,15 +16,21 @@ import java.util.regex.Pattern;
 public class PermissionService {
     private final PermissionRepository permissionRepository;
     private static final Set<String> VALID_ROLES = Set.of("admin", "teacher", "student");
-
+    // check requets endpoints co pathvariable voi request param
     public boolean hasPermission(String path, String method, String roleName) {
         List<Permission> permissions = permissionRepository.findByMethodAndRoleName(method, roleName);
 
-        return permissions.stream()
-                .map(permission -> Pattern.compile(permission.getPath().replaceAll("\\{[^}]+\\}", ".*")))
-                .anyMatch(pattern -> pattern.matcher(path).matches());
-    }
+        // Lấy phần path chính, loại bỏ query params nếu có
+        String cleanPath = path.split("\\?")[0];
 
+        return permissions.stream()
+                .map(permission -> {
+                    // Chuẩn hóa path lưu trong DB để tạo regex khớp với thực tế
+                    String permissionPathPattern = ".*" + permission.getPath().replaceAll("\\{[^}]+\\}", ".*") + ".*";
+                    return Pattern.compile(permissionPathPattern);
+                })
+                .anyMatch(pattern -> pattern.matcher(cleanPath).matches());
+    }
 
     public Permission giveUserPermission(String path, String method, String roleName) {
         method = method.toUpperCase();

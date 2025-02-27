@@ -17,4 +17,5 @@ public interface CourseService {
      void restoreCourse(String courseName);
      void updateCourse(Long id,Course course);
      CourseDto findByCourseName(String courseName);
+     Boolean existByCourseName(String courseName);
 }

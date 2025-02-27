@@ -28,7 +28,6 @@ public class CourseTeacherController {
         return courseTeacherService.removeTeacherFromCourse(input);
     }
 
-
     @GetMapping("/teacher-list/{courseName}")
     public List<UserDto> getTeachersByCourse(@PathVariable("courseName") String courseName) {
         return  courseTeacherService.getTeachersByCourseName(courseName);

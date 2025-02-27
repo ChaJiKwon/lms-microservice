@@ -75,6 +75,12 @@ public class CourseServiceImpl implements CourseService {
         return modelMapper.map(course, CourseDto.class);
     }
 
+    //called by enrollment service to check for data integrity
+    @Override
+    public Boolean existByCourseName(String courseName) {
+        return courseRepository.existsByCourseName(courseName);
+    }
+
     @Override
     public void delete(String courseName) {
         //replace with deletebyId

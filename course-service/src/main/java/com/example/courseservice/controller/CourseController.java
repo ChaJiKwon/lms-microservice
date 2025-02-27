@@ -46,4 +46,10 @@ public class CourseController {
         courseService.restoreCourse(courseName);
         return new ResponseEntity<>("Restore course success", HttpStatus.OK);
     }
+
+    //called by enrollment-service
+    @GetMapping("/exists/{courseName}")
+    public Boolean existByCourseName(@PathVariable("courseName") String courseName){
+        return courseService.existByCourseName(courseName);
+    }
 }

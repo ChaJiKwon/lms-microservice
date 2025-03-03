@@ -38,7 +38,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         Enrollment enrollment =enrollmentRepository.findByCourseNameAndStudentEmail(courseName, studentEmail)
                 .orElseThrow(()->new DuplicateEnrollmentException("Enrollment not found , please try again"));
         if (enrollment.isRegistered() ){
-            throw new DuplicateEnrollmentException("Student " + studentEmail + " already in the course");
+            throw new DuplicateEnrollmentException("Student " + studentEmail + " already in the "+ courseName +" course");
         }
         enrollment.setCourseName(courseName);
         enrollment.setStudentEmail(studentEmail);

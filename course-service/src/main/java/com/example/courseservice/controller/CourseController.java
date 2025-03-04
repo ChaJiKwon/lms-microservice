@@ -4,22 +4,33 @@ import com.example.courseservice.dto.response.CustomResponse;
 import com.example.courseservice.entity.Course;
 import com.example.courseservice.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
+
+
 @RestController
 @RequestMapping("course")
 public class CourseController {
     @Autowired
     CourseService courseService;
     @GetMapping("/all-course")
-    public List<CourseDto> getAllCourses(){
-        return courseService.listAllCourse();
+    public Page<CourseDto> getAllCourses(
+            @RequestParam(value = "page",defaultValue = "0") int currentPage
+            ,@RequestParam(value = "size",defaultValue = "3") int size){
+        Pageable pageable = PageRequest.of(currentPage, size);
+        return courseService.listAllCourse(pageable,currentPage);
     }
+
     @GetMapping("/deleted-course")
-    public List<CourseDto> getDeletedCourses(){
-        return courseService.listAllDeletedCourse();
+    public Page<CourseDto> getDeletedCourses(
+            @RequestParam(value = "page",defaultValue = "0") int currentPage
+            ,@RequestParam(value = "size",defaultValue = "3") int size){
+        Pageable pageable = PageRequest.of(currentPage, size);
+        return courseService.listAllDeletedCourse(pageable, currentPage);
     }
 
     @GetMapping("/info/{courseName}")

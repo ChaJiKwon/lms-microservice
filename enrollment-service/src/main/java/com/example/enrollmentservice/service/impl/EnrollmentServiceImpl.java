@@ -18,7 +18,14 @@ import java.time.Year;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
+//checked exception, unchecked exception
+
+//auditing..
+// swagger or openapi
+//
 
 @Slf4j
 @Service
@@ -35,16 +42,29 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         if (!courseCode.equals(coursePassword)) {
             throw new InvalidCoursePasswordException("Incorrect course password! Please try again");
         }
-        Enrollment enrollment =enrollmentRepository.findByCourseNameAndStudentEmail(courseName, studentEmail)
-                .orElseThrow(()->new DuplicateEnrollmentException("Enrollment not found , please try again"));
-        if (enrollment.isRegistered() ){
-            throw new DuplicateEnrollmentException("Student " + studentEmail + " already in the "+ courseName +" course");
+        Optional<Enrollment> existingEnrollment = enrollmentRepository
+                .findByCourseNameAndStudentEmail(courseName, studentEmail);
+
+
+        CustomResponse response= new CustomResponse();
+        if (existingEnrollment.isPresent()) {
+            // Nếu đã có bản ghi, kiểm tra isRegistered
+            if (existingEnrollment.get().isRegistered()) {
+                throw new DuplicateEnrollmentException("Student " + studentEmail + " is already enrolled in " + courseName);
+            } else {
+                // Nếu isRegistered = false, cập nhật lại trạng thái thành true
+                existingEnrollment.get().setRegistered(true);
+                enrollmentRepository.save(existingEnrollment.get());
+                response.setMessage("Student " + studentEmail.toUpperCase(Locale.ROOT) + " success register to course " + courseName );
+                response.setStatusCode(200);
+                return response;
+            }
         }
+        Enrollment enrollment =new Enrollment();
         enrollment.setCourseName(courseName);
         enrollment.setStudentEmail(studentEmail);
         enrollment.setRegistered(true);
         enrollmentRepository.save(enrollment);
-        CustomResponse response= new CustomResponse();
         response.setMessage("Student " + studentEmail.toUpperCase(Locale.ROOT) + " success register to course " + courseName );
         response.setStatusCode(200);
         return response;
@@ -64,7 +84,6 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         // Cập nhật trạng thái đăng ký
         enrollment.setRegistered(false);
         enrollmentRepository.save(enrollment);
-
         // Tạo response
         CustomResponse response = new CustomResponse();
         response.setMessage("Student " + studentEmail.toUpperCase(Locale.ROOT) + " has successfully unenrolled from course " + courseName);

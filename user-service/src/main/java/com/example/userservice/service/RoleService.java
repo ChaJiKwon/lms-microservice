@@ -1,6 +1,8 @@
 package com.example.userservice.service;
 
+import com.example.userservice.dto.RoleDto;
 import com.example.userservice.dto.RoleInputDto;
+import com.example.userservice.dto.UserDto;
 import com.example.userservice.entity.Role;
 import com.example.userservice.entity.User;
 import com.example.userservice.exception.DuplicateRoleException;
@@ -19,9 +21,11 @@ import java.util.Set;
 public class RoleService {
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
-
+    private final ModelMapper modelMapper;
     Set<String> validRoles = Set.of("admin", "student", "teacher");
-    public Role setUserRole(RoleInputDto roleInputDto){
+
+
+    public UserDto setUserRole(RoleInputDto roleInputDto){
         User user = userRepository.findByEmail(roleInputDto.getEmail())
                 .orElseThrow(()-> new EmailNotFoundException("Cannot found user with email" +roleInputDto.getEmail() ));
 
@@ -31,13 +35,19 @@ public class RoleService {
         if (roleRepository.existsByUserId(user.getId())){
             throw new DuplicateRoleException("User already has role");
         }
+
         Role role = new Role();
         role.setRoleName(roleInputDto.getRoleName());
         role.setUser(user);
+        RoleDto roleDto = new RoleDto();
+        roleDto.setRoleName(role.getRoleName());
+        UserDto userDto = modelMapper.map(user, UserDto.class);
+        userDto.getRoles().add(roleDto);
         log.info("Role: {}", role);
         roleRepository.save(role);
-        return role;
+        return userDto;
     }
+
 
     public RoleInputDto editUserRole(RoleInputDto roleInputDto) {
         User user = userRepository.findByEmail(roleInputDto.getEmail())

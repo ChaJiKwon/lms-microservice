@@ -14,8 +14,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.server.*;
 import reactor.core.publisher.Mono;
-
 import io.jsonwebtoken.security.SignatureException;
+
+import java.util.Arrays;
 
 
 @Component
@@ -26,9 +27,17 @@ public class GlobalExceptionHandler extends AbstractErrorWebExceptionHandler {
                                   ApplicationContext applicationContext,
                                   ServerCodecConfigurer configurer) {
         super(errorAttributes, webProperties.getResources(), applicationContext);
-        // ✅ Fix lỗi: Thiết lập message writers và readers
         this.setMessageWriters(configurer.getWriters());
         this.setMessageReaders(configurer.getReaders());
+
+//        // 🛠️ In ra danh sách tất cả các Bean trong ApplicationContext
+//        String[] beanNames = applicationContext.getBeanDefinitionNames();
+//        Arrays.sort(beanNames); // Sắp xếp theo thứ tự A-Z
+//        System.out.println("====== List of Beans in ApplicationContext ======");
+//        for (String beanName : beanNames) {
+//            System.out.println(beanName);
+//        }
+//        System.out.println("===============================================");
     }
 
     @Override

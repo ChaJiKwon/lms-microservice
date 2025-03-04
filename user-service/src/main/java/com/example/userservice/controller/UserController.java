@@ -27,7 +27,7 @@ public class UserController {
     private final RoleService roleService;
     private final PermissionService permissionService;
 
-
+    //thu dung cach user principal...
     @GetMapping("/profile")
     public UserDto getUserProfile(@RequestHeader String email){
         return userService.getByEmail(email);
@@ -80,8 +80,7 @@ public class UserController {
 
     @PostMapping("/role")
     public ResponseEntity<?> setUserRole(@RequestBody RoleInputDto roleInputDto){
-        Role role = roleService.setUserRole(roleInputDto);
-        return new ResponseEntity<>(role,HttpStatus.OK);
+        return new ResponseEntity<>(roleService.setUserRole(roleInputDto),HttpStatus.OK);
     }
 
     @PutMapping("/role/edit")

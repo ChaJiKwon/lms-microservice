@@ -27,9 +27,7 @@ public class AuthorizationFilter implements GatewayFilter {
         System.out.println("authorization filter.....");
         ServerHttpRequest request = exchange.getRequest();
         List<String> userRoles = request.getHeaders().getOrEmpty("roles");
-        String path = exchange.getRequest().getURI().getPath();
-        String method = exchange.getRequest().getMethod().toString();
-        log.info("Permission roles: {}, Path: {}, Method: {}", userRoles, path, method);
+
         // check if api is not public and need to authorize
         if (routerValidator.isSecured.test(request)) {
             //check role of user
@@ -38,21 +36,22 @@ public class AuthorizationFilter implements GatewayFilter {
                 exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
                 return exchange.getResponse().setComplete();
             }
+
             String role = userRoles.get(0);
+            String path = exchange.getRequest().getURI().getPath();
+            String method = exchange.getRequest().getMethod().toString();
+            log.info("Permission roles: {}, Path: {}, Method: {}", userRoles, path, method);
             // Gọi API user-service để kiểm tra quyền
             return webClientBuilder.build()
                     .get()
                     .uri("http://localhost:8080/user/check-permission?path=" + path + "&method=" + method + "&role=" + role)
                     .retrieve()
                     .bodyToMono(Boolean.class)
-                    .flatMap(isAllowed -> {
-                        if (Boolean.TRUE.equals(isAllowed)) {
-                            return chain.filter(exchange);
-                        } else {
-                            exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-                            throw new ForbiddenUrlException("This url this forbidden, " + role.toUpperCase(Locale.ROOT) + " is not allowed to access");
-                        }
-                    });
+                    .filter(Boolean.TRUE::equals) // Chỉ tiếp tục nếu isAllowed == true
+                    .switchIfEmpty(Mono.error(new ForbiddenUrlException("This url is forbidden, " + role.toUpperCase(Locale.ROOT) + " is not allowed to access")))
+                    // Nếu isAllowed == true thì tiếp tục filter
+                    .flatMap(isAllowed -> chain.filter(exchange));
+
         }
         return chain.filter(exchange);
     }

@@ -13,7 +13,7 @@ import java.util.Objects;
 public class UserServiceClient {
     private final RestTemplate restTemplate;
     private static final String USER_SERVICE_DETAIL_URL = "http://user-service/user/email/";
-
+    private static final String USER_SERVICE_EXISTSBYEMAIL_URL = "http://user-service/user/exists/";
     public UserServiceClient(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
@@ -32,7 +32,7 @@ public class UserServiceClient {
     }
 
     public boolean existByEmail(String email){
-        String url = "http://user-service/user/exist/" + email;
+        String url =  USER_SERVICE_EXISTSBYEMAIL_URL+  email;
         return Boolean.TRUE.equals(restTemplate.getForObject(url, Boolean.class));
     }
     public UserDto getUserByEmail(String email){

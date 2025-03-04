@@ -52,7 +52,6 @@ public class GlobalFilterConfig {
         };
     }
 
-
     @Bean
     public GlobalFilter someGlobalFilter(){
         return someFilter::filter;

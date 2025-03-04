@@ -3,14 +3,14 @@ package com.example.courseservice.service;
 import com.example.courseservice.dto.CourseDto;
 import com.example.courseservice.dto.response.CustomResponse;
 import com.example.courseservice.entity.Course;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
-import java.util.Optional;
+
 
 public interface CourseService {
-     List<CourseDto> listAllCourse();
-     List<CourseDto> listAllDeletedCourse();
+     Page<CourseDto> listAllCourse(final Pageable pageable,int currentPage);
+     Page<CourseDto> listAllDeletedCourse(final Pageable pageable,int currentPage);
      Course findById(Long id);
      CustomResponse createCourse(CourseDto courseDto);
      void delete(String courseName);

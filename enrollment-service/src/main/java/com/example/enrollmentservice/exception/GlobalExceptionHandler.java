@@ -15,7 +15,6 @@ public class GlobalExceptionHandler {
             , StudentNotFoundException.class,})
     public ResponseEntity<ErrorResponse> handleCustomExceptions(RuntimeException e) {
         ErrorResponse response = new ErrorResponse();
-        response.setException(e.getClass().getSimpleName());
         response.setMessage(e.getMessage());
         response.setStatusCode(HttpStatus.BAD_REQUEST.value());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);

@@ -17,7 +17,7 @@ public class UserService  {
         log.info("user dto: " + userDto);
         return restTemplate.getForObject(userServiceUrl, UserDto.class);
     }
-    public UserDto saveUser(UserDto userDTO){
+    public void saveUser(UserDto userDTO){
         String url = "http://USER-SERVICE/user/save";
         UserDto request = new UserDto();
         request.setEmail(userDTO.getEmail());
@@ -25,7 +25,7 @@ public class UserService  {
 //        String password = userRegisterDTO.getPassword();
 //        System.out.println("Paass: " + password);
         request.setPassword(userDTO.getPassword());
-        return restTemplate.postForObject(url,request , UserDto.class);
+        restTemplate.postForObject(url, request, UserDto.class);
     }
     public Boolean existsByEmail(String email) {
         UserDto user = findByEmail(email);

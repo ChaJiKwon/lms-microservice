@@ -1,5 +1,4 @@
 package com.example.apigateway.filter;
-
 import com.example.apigateway.exception.ForbiddenUrlException;
 import com.example.apigateway.service.RouterValidator;
 import lombok.RequiredArgsConstructor;
@@ -51,7 +50,6 @@ public class AuthorizationFilter implements GatewayFilter {
                     .switchIfEmpty(Mono.error(new ForbiddenUrlException("This url is forbidden, " + role.toUpperCase(Locale.ROOT) + " is not allowed to access")))
                     // Nếu isAllowed == true thì tiếp tục filter
                     .flatMap(isAllowed -> chain.filter(exchange));
-
         }
         return chain.filter(exchange);
     }

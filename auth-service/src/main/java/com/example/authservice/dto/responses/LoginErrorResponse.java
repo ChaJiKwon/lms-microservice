@@ -1,4 +1,4 @@
-package com.example.authservice.exception.responses;
+package com.example.authservice.dto.responses;
 
 import lombok.Data;
 

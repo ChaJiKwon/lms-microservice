@@ -6,9 +6,17 @@ import com.example.enrollmentservice.dto.CourseRegisterDto;
 import com.example.enrollmentservice.dto.UserDto;
 import com.example.enrollmentservice.dto.response.CustomResponse;
 import com.example.enrollmentservice.service.EnrollmentService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+
+
+@Tag(
+        name = "CRUD APIs for enrollment-service",
+        description = "Enroll- unenroll students from a course, get all students in a specific courseName, and get all course registered by a specific student"
+
+)
 @RestController
 @RequestMapping("enrollment")
 @RequiredArgsConstructor

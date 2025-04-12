@@ -1,5 +1,4 @@
 package com.example.enrollmentservice.service.impl;
-
 import com.example.enrollmentservice.dto.CourseDto;
 import com.example.enrollmentservice.dto.UserDto;
 import com.example.enrollmentservice.dto.response.CustomResponse;
@@ -13,7 +12,6 @@ import com.example.enrollmentservice.service.client.CourseClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
 import java.time.Year;
 import java.util.Arrays;
 import java.util.List;
@@ -25,7 +23,7 @@ import java.util.stream.Collectors;
 
 //auditing..
 // swagger or openapi
-//
+// event sourcing ...
 
 @Slf4j
 @Service
@@ -33,6 +31,8 @@ import java.util.stream.Collectors;
 public class EnrollmentServiceImpl implements EnrollmentService {
     private final EnrollmentRepository enrollmentRepository;
     private final CourseClient courseClient;
+
+
     @Override
     public CustomResponse registerToCourse(String courseName, String coursePassword,String studentEmail) {
         if (courseClient.existByCourseName(courseName)){
@@ -145,9 +145,6 @@ public class EnrollmentServiceImpl implements EnrollmentService {
             return courseDto;
         }).toList();
     }
-
-
-
 
     // create password to enter course
     private String generateCourseCode(String courseName) {

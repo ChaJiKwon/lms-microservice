@@ -43,7 +43,6 @@ public class UsernamePasswordAuthenticationProvider implements AuthenticationPro
                 } else {
                     log.warn("User does not have any assigned roles!");
                 }
-
                 return new UsernamePasswordAuthenticationToken(email, password, authorities);
             } else {
                 log.error("Invalid email or Password");

@@ -3,10 +3,11 @@ package com.example.authservice.service;
 
 import com.example.authservice.constant.SecurityConst;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -15,10 +16,12 @@ import java.security.Key;
 import java.util.Date;
 import java.util.StringJoiner;
 import java.util.function.Function;
+@Slf4j
 @Service
 public class JWTService {
     public String generateToken(Authentication authentication){
         SecretKey key = (SecretKey) getStringToKey(SecurityConst.JWT_KEY);
+        log.info("Authentication, {}" ,authentication);
         return Jwts.builder()
                 .subject(authentication.getName())
                 .claim("email",authentication.getName())
@@ -62,6 +65,7 @@ public class JWTService {
                 parseSignedClaims(token).
                 getPayload();
     }
+
     public String getEmailFromToken(String token){
         SecretKey key = (SecretKey) getStringToKey(SecurityConst.JWT_KEY);
         Claims claims=Jwts.parser()
@@ -71,8 +75,16 @@ public class JWTService {
                 .getPayload();
         return claims.getSubject();
     }
+
     public Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
 
+    public boolean isTokenExpired(String token) {
+        try {
+            return this.extractExpiration(token).before(new Date());
+        } catch (ExpiredJwtException e) {
+            return true;
+        }
+    }
 }

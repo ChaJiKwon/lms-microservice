@@ -22,6 +22,7 @@ import java.util.Arrays;
 @Component
 @Slf4j
 public class GlobalExceptionHandler extends AbstractErrorWebExceptionHandler {
+
     public GlobalExceptionHandler(ErrorAttributes errorAttributes,
                                   WebProperties webProperties,
                                   ApplicationContext applicationContext,
@@ -29,15 +30,6 @@ public class GlobalExceptionHandler extends AbstractErrorWebExceptionHandler {
         super(errorAttributes, webProperties.getResources(), applicationContext);
         this.setMessageWriters(configurer.getWriters());
         this.setMessageReaders(configurer.getReaders());
-
-//        // 🛠️ In ra danh sách tất cả các Bean trong ApplicationContext
-//        String[] beanNames = applicationContext.getBeanDefinitionNames();
-//        Arrays.sort(beanNames); // Sắp xếp theo thứ tự A-Z
-//        System.out.println("====== List of Beans in ApplicationContext ======");
-//        for (String beanName : beanNames) {
-//            System.out.println(beanName);
-//        }
-//        System.out.println("===============================================");
     }
 
     @Override
@@ -49,20 +41,16 @@ public class GlobalExceptionHandler extends AbstractErrorWebExceptionHandler {
         Throwable error = this.getError(request);
         log.info("Error in rq: {}", String.valueOf(error));
         ErrorResponse response = new ErrorResponse();
-        if (error instanceof ExpiredJwtException expiredJwtException){
-            return createErrorResponse(expiredJwtException,request);
-        }
-        if (error instanceof ForbiddenUrlException forbiddenUrlException){
-            return createErrorResponse(forbiddenUrlException,request);
-        }
-        if (error instanceof MalformedJwtException malformedJwtException){
-            return createErrorResponse(malformedJwtException,request);
-        }
-        if (error instanceof SignatureException signatureException){
-            return createErrorResponse(signatureException,request);
+        if (error instanceof ExpiredJwtException
+                || error instanceof MalformedJwtException
+                || error instanceof SignatureException){
+            response.setPath(request.path());
+            response.setStatusCode(401);
+            response.setMessage("Invalid token please try again");
+            return ServerResponse.status(HttpStatus.UNAUTHORIZED)
+                    .body(BodyInserters.fromValue(response));
         }
         if (error instanceof LoginRequiredException loginRequiredException){
-            response.setException(error.getClass().getSimpleName());
             response.setPath(request.path());
             response.setStatusCode(401);
             response.setMessage(loginRequiredException.getMessage());
@@ -70,22 +58,10 @@ public class GlobalExceptionHandler extends AbstractErrorWebExceptionHandler {
                     .body(BodyInserters.fromValue(response));
         }
         log.info("Error in rq: {}", String.valueOf(error));
-        response.setException(error.getClass().getSimpleName());
         response.setMessage("Unexpected error");
         response.setPath(request.path());
         response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
         return ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(BodyInserters.fromValue(response));
-    }
-
-    private Mono<ServerResponse> createErrorResponse(Throwable e, ServerRequest request) {
-        ErrorResponse response = new ErrorResponse();
-        response.setException(e.getClass().getSimpleName());
-        response.setMessage(e.getMessage());
-        response.setPath(request.path());
-        response.setStatusCode(HttpStatus.FORBIDDEN.value());
-        return ServerResponse.status(HttpStatus.FORBIDDEN)
-                .contentType(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromValue(response));
     }
 }

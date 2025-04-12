@@ -1,6 +1,6 @@
 package com.example.authservice.exception;
 
-import com.example.authservice.exception.responses.LoginErrorResponse;
+import com.example.authservice.dto.responses.LoginErrorResponse;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

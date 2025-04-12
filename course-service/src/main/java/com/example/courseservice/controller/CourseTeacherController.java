@@ -4,10 +4,10 @@ import com.example.courseservice.dto.CourseTeacherInput;
 import com.example.courseservice.dto.UserDto;
 import com.example.courseservice.dto.response.CustomResponse;
 import com.example.courseservice.service.CourseTeacherService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,6 +15,8 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("course-teacher")
+@SecurityRequirement(name = "bearerAuth")
+
 @RequiredArgsConstructor
 public class CourseTeacherController {
     private final CourseTeacherService courseTeacherService;

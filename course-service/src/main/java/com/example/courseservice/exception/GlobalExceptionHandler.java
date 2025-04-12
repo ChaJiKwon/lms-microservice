@@ -9,10 +9,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(CourseServiceException.class)
-    public ResponseEntity<Object> handleCourseNotFound(CourseServiceException e){
+    public ResponseEntity<Object> handleCourseException(CourseServiceException e){
         CustomResponse response = new CustomResponse();
         response.setMessage(e.getMessage());
         response.setStatusCode(HttpStatus.BAD_REQUEST.value());
         return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
     }
+
 }

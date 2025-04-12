@@ -1,10 +1,10 @@
 package com.example.enrollmentservice.dto.response;
+import lombok.Getter;
+import lombok.Setter;
 
-import lombok.Data;
-
-@Data
+@Getter
+@Setter
 public class ErrorResponse {
-    private String exception;
     private String message;
     private int statusCode;
 }

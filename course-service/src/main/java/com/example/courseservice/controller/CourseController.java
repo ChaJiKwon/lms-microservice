@@ -3,6 +3,7 @@ import com.example.courseservice.dto.CourseDto;
 import com.example.courseservice.dto.response.CustomResponse;
 import com.example.courseservice.entity.Course;
 import com.example.courseservice.service.CourseService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("course")
+@SecurityRequirement(name = "bearerAuth")
+
 public class CourseController {
     @Autowired
     CourseService courseService;
